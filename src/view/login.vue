@@ -16,7 +16,7 @@
           initialFrameWidth: null,
           initialFrameHeight: 900,
           BaseUrl: '',
-          UEDITOR_HOME_URL: 'static/ueditor/',
+          //UEDITOR_HOME_URL: '/static/ueditor/',
         },
       };
     },
