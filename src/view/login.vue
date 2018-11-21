@@ -16,11 +16,12 @@
           initialFrameWidth: null,
           initialFrameHeight: 900,
           BaseUrl: '',
-          //UEDITOR_HOME_URL: '/static/ueditor/',
+          UEDITOR_HOME_URL: process.env.NODE_ENV == 'development'?'/static/ueditor/':'/ueditor-uploadimage-qinniu/dist/static/ueditor/',
         },
       };
     },
     mounted(){
+    	console.log(process.env.NODE_ENV)
       this.config.initialContent = '';
     },
     methods: {
