@@ -7,7 +7,7 @@ UE.registerUI('dialogTemplate', function (editor, uiName) {
     title: '模版',
     onclick: function () {
       var dialog = new UE.ui.Dialog({
-        iframeUrl: '/static/ueditor/template/template.html',
+        iframeUrl: 'static/ueditor/template/template.html',
         editor: editor,
         name: 'template',
         title: "模板",

@@ -7,7 +7,7 @@ UE.registerUI('dialog', function (editor, uiName) {
         title  : '秀米',
         onclick: function () {
             var dialog = new UE.ui.Dialog({
-                iframeUrl: '/static/ueditor/xiumi-ue-dialog-v5.html',
+                iframeUrl: 'static/ueditor/xiumi-ue-dialog-v5.html',
                 editor   : editor,
                 name     : 'xiumi-connect',
                 title    : "秀米图文消息助手",
