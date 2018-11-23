@@ -8213,11 +8213,8 @@ UE.ajax = function() {
         if (!xhr || !url) return;
         var ajaxOpts = ajaxOptions ? utils.extend(defaultAjaxOptions,ajaxOptions) : defaultAjaxOptions;
 
-        var submitStr = json2str(ajaxOpts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
-        //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
-        if (!utils.isEmptyObject(ajaxOpts.data)){
-            submitStr += (submitStr? "&":"") + json2str(ajaxOpts.data);
-        }
+      var submitStr = ajaxOpts.data;
+
         //超时检测
         var timerID = setTimeout(function() {
             if (xhr.readyState != 4) {
@@ -8227,9 +8224,8 @@ UE.ajax = function() {
             }
         }, ajaxOpts.timeout);
 
-        var method = ajaxOpts.method.toUpperCase();
-        var str = url + (url.indexOf("?")==-1?"?":"&") + (method=="POST"?"":submitStr+ "&noCache=" + +new Date);
-        xhr.open(method, str, ajaxOpts.async);
+      var method = ajaxOpts.method.toUpperCase();
+        xhr.open(method, url, ajaxOpts.async);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 if (!timeIsOut && xhr.status == 200) {
@@ -8239,9 +8235,8 @@ UE.ajax = function() {
                 }
             }
         };
-        xhr.setRequestHeader('Authorization', sessionStorage.getItem("token") );
+        xhr.setRequestHeader('Authorization', 'UpToken '+sessionStorage.getItem("token"));
         if (method == "POST") {
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.send(submitStr);
         } else {
             xhr.send(null);
@@ -24530,30 +24525,29 @@ UE.plugin.register('simpleupload', function (){
               var formData = new FormData();
               formData.append(me.options.imageFieldName, form[0].files[0] );
               formData.append("token", imageActionUrl[1]  );
-              $.ajax({
-                url: action,
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                  var link = imageActionUrl[2]+data.hash
+            var options = {
+              timeout:100000,
+              onsuccess:function (data) {
+                data = JSON.parse(data.responseText)
+                var link = imageActionUrl[2]+data.hash
 
-                  if(data) {
-                    loader = me.document.getElementById(loadingId);
-                    loader.setAttribute('src', link);
-                    loader.setAttribute('_src', link);
-                    loader.setAttribute('title', data.title || '');
-                    loader.setAttribute('alt', data.original || '');
-                    loader.removeAttribute('id');
-                    domUtils.removeClasses(loader, 'loadingclass');
-                  } else {
-                    showErrorLoader && showErrorLoader(data);
-                  }
-                  form.reset();
+                if(data) {
+                  loader = me.document.getElementById(loadingId);
+                  loader.setAttribute('src', link);
+                  loader.setAttribute('_src', link);
+                  loader.setAttribute('title', data.title || '');
+                  loader.setAttribute('alt', data.original || '');
+                  loader.removeAttribute('id');
+                  domUtils.removeClasses(loader, 'loadingclass');
+                } else {
+                  showErrorLoader && showErrorLoader(data);
                 }
-              });
+                form.reset();
+
+              }
+            };
+            options['data'] = formData
+            UE.ajax.request(action, options);
               function showErrorLoader(title){
                 if(loadingId) {
                   var loader = me.document.getElementById(loadingId);

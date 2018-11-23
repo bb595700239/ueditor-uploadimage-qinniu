@@ -634,12 +634,13 @@ function exec(scrawlObj) {
             var options = {
                 timeout:100000,
                 onsuccess:function (xhr) {
-                    if (!scrawlObj.isCancelScrawl) {
+                  console.log(xhr)
+
                         var responseObj;
                         responseObj = eval("(" + xhr.responseText + ")");
-                        if (responseObj.state == "SUCCESS") {
+                        if (responseObj.hash) {
                             var imgObj = {},
-                                url = editor.options.scrawlUrlPrefix + responseObj.url;
+                                url = actionUrlArr[2]+responseObj.hash
                             imgObj.src = url;
                             imgObj._src = url;
                             imgObj.alt = responseObj.original || '';
@@ -650,19 +651,19 @@ function exec(scrawlObj) {
                             alert(responseObj.state);
                         }
 
-                    }
                 },
                 onerror:function () {
                     alert(lang.imageError);
                     dialog.close();
                 }
             };
-            options[editor.getOpt('scrawlFieldName')] = base64;
 
             var actionUrl = editor.getActionUrl(editor.getOpt('scrawlActionName')),
                 params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
+                actionUrlArr = actionUrl.split(',')
                 url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
-            ajax.request(url, options);
+            options['data'] = base64
+            ajax.request(actionUrlArr[0]+'/putb64/-1', options);
         }
     } else {
         addMaskLayer(lang.noScarwl + "&nbsp;&nbsp;&nbsp;<input type='button' value='" + lang.continueBtn + "'  onclick='removeMaskLayer()'/>");

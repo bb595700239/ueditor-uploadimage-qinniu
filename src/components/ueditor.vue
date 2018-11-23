@@ -40,14 +40,13 @@
       },
       init(){
         if(UE.Editor.prototype._bkGetActionUrl === undefined){
+          sessionStorage.setItem("token",token())
           UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
           UE.Editor.prototype.getActionUrl = function(act) {
             //判断路径   这里是config.json 中设置执行上传的action名称
-            if (act == 'uploadimage') {
+            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl') {
               return `${action},${token()},${domain}`;
               //   return 'http://118.25.105.213:11088/back/file/upload';
-            } else if (act == 'uploadvideo') {
-              return '';
             } else {
               return this._bkGetActionUrl.call(this, act);
             }
