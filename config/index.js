@@ -31,11 +31,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/back': {
-        target: 'http://192.168.0.144:11080',//http://www.hpaxcf.com/
+      '/list': {
+        target: 'http://rsf.qbox.me',//http://www.hpaxcf.com/
         changeOrigin: true,
         pathRewrite: {
-          '^/back': '/back'
+          '^/list': '/list'
         }
       },
     },

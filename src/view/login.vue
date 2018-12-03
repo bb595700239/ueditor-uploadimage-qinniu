@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-box">
     <v-editor :config=config id="ue1" ref="ueditor" v-model="config.initialContent"></v-editor>
   </div>
 </template>
@@ -14,7 +14,7 @@
           initialContent: '234',   //初始化编辑器的内容,也可以通过textarea/script给值，看官网例子
           autoClearinitialContent: false, //是否自动清除编辑器初始内容，注意：如果focus属性设置为true,这个也为真，那么编辑器一上来就会触发导致初始化的内容看不到了
           initialFrameWidth: null,
-          initialFrameHeight: 900,
+          initialFrameHeight: 500,
           BaseUrl: '',
           UEDITOR_HOME_URL: process.env.NODE_ENV == 'development'?'/static/ueditor/':'/ueditor-uploadimage-qinniu/dist/static/ueditor/',
         },
@@ -33,5 +33,9 @@
 
 <style lang="scss" scoped>
   @import '../assets/css/mixin';
-
+  .editor-box{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 </style>

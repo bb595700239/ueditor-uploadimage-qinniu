@@ -1,7 +1,5 @@
 <template>
-  <div>
     <script :id=id type="text/plain"></script>
-  </div>
 </template>
 <script>
   import './../../static/ueditor/ueditor.config.js'
@@ -9,7 +7,7 @@
   import './../../static/ueditor/lang/zh-cn/zh-cn.js'
   import './../../static/ueditor/xiumi-ue-dialog-v5.js'
   import './../../static/ueditor/template/template.js'
-  import {token,action,domain} from "../config/qiniuToken";
+  import {token,action,domain,bucketName,accessToken} from "../config/qiniuToken";
   export default {
     name: 'UE',
     data () {
@@ -44,8 +42,9 @@
           UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
           UE.Editor.prototype.getActionUrl = function(act) {
             //判断路径   这里是config.json 中设置执行上传的action名称
-            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile') {
-              return `${action},${token()},${domain}`;
+            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile' || act == 'listimage' || act == 'listfile') {
+              UE.accessToken = accessToken
+              return `${action},${token()},${domain},${bucketName}`;
               //   return 'http://118.25.105.213:11088/back/file/upload';
             } else {
               return this._bkGetActionUrl.call(this, act);

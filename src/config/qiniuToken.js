@@ -197,6 +197,16 @@ let genUpToken = function(accessKey, secretKey, putPolicy) {
 	return upload_token;
 };
 
+let genAccessToken = function(accessKey,secretKey,bucketName,url){
+  let signingStr = url  //"/list?bucket="+bucketName+"&limit=20&marker=\n"
+  let sign = CryptoJS.HmacSHA1(signingStr, secretKey)
+  let encodedSign = sign.toString(CryptoJS.enc.Base64)
+  encodedSign = safe64(encodedSign)
+  return `${accessKey}:${encodedSign}`
+}
+let accessToken = (url) => {
+  return genAccessToken(AK, SK, bucketName,url)
+}
 
 let token = () => {
 	let policy = {};
@@ -209,5 +219,5 @@ let token = () => {
 
 
 export {
-	token, action, domain
+	token, action, domain, bucketName,accessToken
 }

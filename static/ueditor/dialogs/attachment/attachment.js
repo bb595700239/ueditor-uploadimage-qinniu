@@ -616,7 +616,7 @@
         initData: function () {
 
             /* 拉取数据需要使用的值 */
-            this.state = 0;
+            this.state = '';
             this.listSize = editor.getOpt('fileManagerListSize');
             this.listIndex = 0;
             this.listEnd = false;
@@ -630,7 +630,42 @@
 
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                ajax.request(editor.getActionUrl(editor.getOpt('fileManagerActionName')), {
+              var data = editor.getActionUrl(editor.getOpt('fileManagerActionName')).split(','),
+                url = data[0],
+                isJsonp = utils.isCrossDomainUrl(url);
+              $.ajax({
+                url:'http://212.64.24.247:3001/list',
+                type:'GET',
+                data:{bucket:data[3],limit:_this.listSize,marker:_this.state},
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader("Authorization", 'QBox '+UE.accessToken('/list?bucket='+data[3]+'&limit='+_this.listSize+'&marker='+_this.state+'\n'));
+                },
+                success: function (r) {
+
+                  var json = JSON.parse(r.data)
+                  if (json.items) {
+                    var arr = []
+                    $.each(json.items,function(i,item){
+                      if(item.mimeType.indexOf('image')==-1) {
+                        arr.push({url: data[2] + item.hash})
+                      }
+                    })
+                    _this.pushData(arr);
+                    _this.listIndex += parseInt(arr.length);
+                    if(!json.marker){
+                      _this.listEnd = true;
+
+                    }
+                    _this.state = json.marker
+                    _this.isLoadingData = false;
+                  }
+
+                },
+                error: function () {
+                  _this.isLoadingData = false;
+                }
+              })
+                /*ajax.request(editor.getActionUrl(editor.getOpt('fileManagerActionName')), {
                     timeout: 100000,
                     data: utils.extend({
                             start: this.listIndex,
@@ -661,7 +696,7 @@
                     onerror: function () {
                         _this.isLoadingData = false;
                     }
-                });
+                });*/
             }
         },
         /* 添加图片到列表界面上 */
