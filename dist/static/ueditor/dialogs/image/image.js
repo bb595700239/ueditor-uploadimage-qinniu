@@ -4,7 +4,6 @@
  * Time: 下午16:34
  * 上传图片对话框逻辑代码,包括tab: 远程图片/上传图片/在线图片/搜索图片
  */
-
 (function () {
 
     var remoteImage,
@@ -839,9 +838,9 @@
         initData: function () {
 
             /* 拉取数据需要使用的值 */
-            this.state = 0;
+            this.state = '';
             this.listSize = editor.getOpt('imageManagerListSize');
-            this.listIndex = 0;
+            this.listIndex = 1;
             this.listEnd = false;
 
             /* 第一次拉取数据 */
@@ -855,15 +854,50 @@
         /* 向后台拉取图片列表数据 */
         getImageData: function () {
             var _this = this;
-
             if(!_this.listEnd && !this.isLoadingData) {
                 this.isLoadingData = true;
-                var url = editor.getActionUrl(editor.getOpt('imageManagerActionName')),
+                var data = editor.getActionUrl(editor.getOpt('imageManagerActionName')).split(','),
+                    url = data[0],
                     isJsonp = utils.isCrossDomainUrl(url);
-                ajax.request(url, {
+                $.ajax({
+                  url:'http://212.64.24.247:3001/list',
+                  type:'GET',
+                  data:{bucket:data[3],limit:_this.listSize,marker:_this.state},
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", 'QBox '+UE.accessToken('/list?bucket='+data[3]+'&limit='+_this.listSize+'&marker='+_this.state+'\n'));
+                  },
+                  success: function (r) {
+
+                    var json = JSON.parse(r.data)
+                    if (json.items) {
+                      var arr = []
+                      $.each(json.items,function(i,item){
+                        if(item.mimeType.indexOf('image')>-1) {
+                          arr.push({url: data[2] + item.hash})
+                        }
+                      })
+                      _this.pushData(arr);
+                      _this.listIndex += parseInt(arr.length);
+                      if(!json.marker){
+                        _this.listEnd = true;
+
+                      }
+                      _this.state = json.marker
+                      _this.isLoadingData = false;
+                    }
+
+                  },
+                  error: function () {
+                    _this.isLoadingData = false;
+                  }
+                })
+
+                /*ajax.request('//rsf.qbox.me/list?bucket='+data[3], {
                     'timeout': 100000,
-                    'dataType': isJsonp ? 'jsonp':'',
+                    //'dataType': isJsonp ? 'jsonp':'',
+
                     'data': utils.extend({
+                            bucket: data[3],
                             start: this.listIndex,
                             size: this.listSize
                         }, editor.queryCommandValue('serverparam')),
@@ -892,7 +926,7 @@
                     'onerror': function () {
                         _this.isLoadingData = false;
                     }
-                });
+                });*/
             }
         },
         /* 添加图片到列表界面上 */

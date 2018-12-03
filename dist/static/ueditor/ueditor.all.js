@@ -8024,13 +8024,13 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             if(!serverUrl && imageUrl) {
                 serverUrl = imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2');
             }
-
             if(serverUrl) {
                 serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
                 return utils.formatUrl(serverUrl);
             } else {
                 return '';
             }
+
         }
     };
     utils.inherits(Editor, EventBase);
@@ -8235,10 +8235,12 @@ UE.ajax = function() {
                 }
             }
         };
-        xhr.setRequestHeader('Authorization', 'UpToken '+sessionStorage.getItem("token"));
+
         if (method == "POST") {
+          xhr.setRequestHeader('Authorization', 'UpToken '+sessionStorage.getItem("token"));
             xhr.send(submitStr);
         } else {
+          xhr.setRequestHeader('Authorization', 'QBox '+sessionStorage.getItem("token"));
             xhr.send(null);
         }
     }
@@ -24455,7 +24457,6 @@ UE.plugin.register('simpleupload', function (){
     var me = this,
         isLoaded = false,
         containerBtn;
-
     function initUploadBtn(){
         var w = containerBtn.offsetWidth || 20,
             h = containerBtn.offsetHeight || 20,
