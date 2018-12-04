@@ -640,9 +640,7 @@
                 beforeSend: function(xhr) {
                   xhr.setRequestHeader("Authorization", 'QBox '+UE.accessToken('/list?bucket='+data[3]+'&limit='+_this.listSize+'&marker='+_this.state+'\n'));
                 },
-                success: function (r) {
-
-                  var json = JSON.parse(r.data)
+                success: function (json) {
                   if (json.items) {
                     var arr = []
                     $.each(json.items,function(i,item){
