@@ -871,7 +871,7 @@
                       var arr = []
                       $.each(json.items,function(i,item){
                         if(item.mimeType.indexOf('image')>-1) {
-                          arr.push({url: data[2] + item.hash})
+                          arr.push({url: data[2] + item.key})
                         }
                       })
                       _this.pushData(arr);
