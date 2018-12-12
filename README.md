@@ -25,3 +25,7 @@ npm run build
 - `domain`   //空间绑定的域名
 
 这样图片就会上传到自己的七牛上去了
+
+# 预览
+
+[demo](http://joubn.com/ueditor-uploadimage-qinniu/dist/index.html#/login)
