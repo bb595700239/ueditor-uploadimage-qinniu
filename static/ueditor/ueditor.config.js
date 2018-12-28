@@ -285,7 +285,7 @@
         //,toolbarTopOffset:400
 
         //设置远程图片是否抓取到本地保存
-        //,catchRemoteImageEnable: true //设置是否抓取远程图片
+        ,catchRemoteImageEnable: true //设置是否抓取远程图片
 
         //pageBreakTag
         //分页标识符,默认是_ueditor_page_break_tag_
@@ -343,7 +343,7 @@
 
         //默认过滤规则相关配置项目
         //,disabledTableInTable:true  //禁止表格嵌套
-        //,allowDivTransToP:true      //允许进入编辑器的div标签自动变成p标签
+        ,allowDivTransToP:false      //允许进入编辑器的div标签自动变成p标签
         //,rgb2Hex:true               //默认产出的数据中的color自动从rgb格式变成16进制格式
 
 		// xss 过滤是否开启,inserthtml等操作
@@ -368,7 +368,7 @@
 			blockquote: ['cite', 'class', 'style'],
 			br:     [],
 			caption: ['class', 'style'],
-			center: [],
+			center: ['class', 'style'],
 			cite:   [],
 			code:   ['class', 'style'],
 			col:    ['align', 'valign', 'span', 'width', 'class', 'style'],
@@ -381,26 +381,26 @@
 			dt:     ['class', 'style'],
 			em:     ['class', 'style'],
 			font:   ['color', 'size', 'face'],
-			footer: [],
+			footer: ['class', 'style'],
 			h1:     ['class', 'style'],
 			h2:     ['class', 'style'],
 			h3:     ['class', 'style'],
 			h4:     ['class', 'style'],
 			h5:     ['class', 'style'],
 			h6:     ['class', 'style'],
-			header: [],
+			header: ['class', 'style'],
 			hr:     [],
 			i:      ['class', 'style'],
-			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex', '_url'],
+			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex', '_url','style'],
 			ins:    ['datetime'],
 			li:     ['class', 'style'],
 			mark:   [],
-			nav:    [],
+			nav:    ['class', 'style'],
 			ol:     ['class', 'style'],
 			p:      ['class', 'style'],
 			pre:    ['class', 'style'],
 			s:      [],
-			section:[],
+			section:['class', 'style'],
 			small:  [],
 			span:   ['class', 'style'],
 			sub:    ['class', 'style'],

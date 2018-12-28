@@ -42,7 +42,7 @@
           UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
           UE.Editor.prototype.getActionUrl = function(act) {
             //判断路径   这里是config.json 中设置执行上传的action名称
-            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile' || act == 'listimage' || act == 'listfile') {
+            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile' || act == 'listimage' || act == 'listfile'|| act == 'catchimage') {
               UE.accessToken = accessToken
               return `${action},${token()},${domain},${bucketName}`;
               //   return 'http://118.25.105.213:11088/back/file/upload';

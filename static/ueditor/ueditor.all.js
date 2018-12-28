@@ -8199,6 +8199,7 @@ UE.ajax = function() {
                 method:"POST",
                 timeout:5000,
                 async:true,
+                headers:{},
                 data:{},//需要传递对象的话只能覆盖
                 onsuccess:function() {
                 },
@@ -8235,12 +8236,14 @@ UE.ajax = function() {
                 }
             }
         };
-
+        for(var item in ajaxOpts.headers){
+        	xhr.setRequestHeader(item, ajaxOpts.headers[item]);
+        }
         if (method == "POST") {
-          xhr.setRequestHeader('Authorization', 'UpToken '+sessionStorage.getItem("token"));
+          //xhr.setRequestHeader('Authorization', 'UpToken '+sessionStorage.getItem("token"));
             xhr.send(submitStr);
         } else {
-          xhr.setRequestHeader('Authorization', 'QBox '+sessionStorage.getItem("token"));
+          //xhr.setRequestHeader('Authorization', 'QBox '+sessionStorage.getItem("token"));
             xhr.send(null);
         }
     }
@@ -23224,7 +23227,7 @@ UE.plugins['catchremoteimage'] = function () {
                 remoteImages.push(src);
             }
         }
-
+        var data = catcherActionUrl.split(',');
         if (remoteImages.length) {
             catchremoteimage(remoteImages, {
                 //成功抓取
@@ -23236,20 +23239,19 @@ UE.plugins['catchremoteimage'] = function () {
                     }
 
                     /* 获取源路径和新路径 */
-                    var i, j, ci, cj, oldSrc, newSrc, list = info.list;
+                    var i, j, ci, cj, oldSrc, newSrc, list =info;
 
                     for (i = 0; ci = imgs[i++];) {
                         oldSrc = ci.getAttribute("_src") || ci.src || "";
-                        for (j = 0; cj = list[j++];) {
-                            if (oldSrc == cj.source && cj.state == "SUCCESS") {  //抓取失败时不做替换处理
-                                newSrc = catcherUrlPrefix + cj.url;
-                                domUtils.setAttributes(ci, {
-                                    "src": newSrc,
-                                    "_src": newSrc
-                                });
-                                break;
-                            }
+                    	
+                        if (list[i-1].key) {  //抓取失败时不做替换处理
+                            newSrc = data[2] + list[i-1].key;
+                            domUtils.setAttributes(ci, {
+                                "src": newSrc,
+                                "_src": newSrc
+                            });
                         }
+                        
                     }
                     me.fireEvent('catchremotesuccess')
                 },
@@ -23263,16 +23265,25 @@ UE.plugins['catchremoteimage'] = function () {
         function catchremoteimage(imgs, callbacks) {
             var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '',
                 url = utils.formatUrl(catcherActionUrl + (catcherActionUrl.indexOf('?') == -1 ? '?':'&') + params),
-                isJsonp = utils.isCrossDomainUrl(url),
                 opt = {
                     'method': 'POST',
-                    'dataType': isJsonp ? 'jsonp':'',
+                    'dataType': '',
+                    'headers':{},
                     'timeout': 60000, //单位：毫秒，回调请求超时设置。目标用户如果网速不是很快的话此处建议设置一个较大的数值
                     'onsuccess': callbacks["success"],
                     'onerror': callbacks["error"]
                 };
-            opt[catcherFieldName] = imgs;
-            ajax.request(url, opt);
+          
+          
+          opt.headers={
+          	'Authorization':'UpToken '+ data[1]
+          }
+          opt.data = JSON.stringify({
+	            host:data[0].split('//')[1],
+	            src:imgs
+	        })
+	        ajax.request('http://212.64.24.247:3001/catchimage', opt);
+          
         }
 
     });
