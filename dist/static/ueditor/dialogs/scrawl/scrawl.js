@@ -663,6 +663,7 @@ function exec(scrawlObj) {
                 actionUrlArr = actionUrl.split(',')
                 url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
             options['data'] = base64
+            options.headers = {'Authorization': 'UpToken '+actionUrlArr[1]}
             ajax.request(actionUrlArr[0]+'/putb64/-1', options);
         }
     } else {
