@@ -22,20 +22,10 @@
       id: {
         type: String
       },
-      vaule:{
-        type: String
-      }
     },
     mounted() {
-      //this.init()
     },
     methods:{
-      getUEContent() { // 获取内容方法
-        return this.editor.getContent()
-      },
-      getUEContentTxt() { // 获取纯文本内容方法
-        return this.editor.getContentTxt()
-      },
       init(){
         if(UE.Editor.prototype._bkGetActionUrl === undefined){
           sessionStorage.setItem("token",token())
@@ -45,7 +35,6 @@
             if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile' || act == 'listimage' || act == 'listfile'|| act == 'catchimage') {
               UE.accessToken = accessToken
               return `${action},${token()},${domain},${bucketName}`;
-              //   return 'http://118.25.105.213:11088/back/file/upload';
             } else {
               return this._bkGetActionUrl.call(this, act);
             }
@@ -55,11 +44,6 @@
         this.editor.addListener("ready", ()=>{
           this.editor.setContent(this.config.initialContent); // 确保UE加载完成后，放入内容。
         });
-        this.editor.addListener("contentChange", ()=>{
-          this.$emit('input',this.getUEContent())
-        })
-        this.$emit('input',this.config.initialContent)
-
       }
     },
     destroyed() {
@@ -70,7 +54,8 @@
         handler:function(val,oldval){
           this.init()
         },
-        deep:true//对象内部的属性监听，也叫深度监听
+        mmediate: true,
+        deep:true
       }
     }
   }

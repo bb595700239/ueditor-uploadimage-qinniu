@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import login from '@/view/login'
+import editor from '@/view/editor'
 
 
 Vue.use(Router);
@@ -10,11 +10,11 @@ export default new Router({
   routes: [
     {
       path: '',
-      redirect: '/login'
+      redirect: '/editor'
     },
     {
-      path: '/login',
-      component: login,
+      path: '/editor',
+      component: editor,
       name: '登录',
       hidden: true
     }]
