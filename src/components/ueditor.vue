@@ -52,21 +52,7 @@
         })
 
 
-        
-        
-        if(UE.Editor.prototype._bkGetActionUrl === undefined){
-          
-          UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-          UE.Editor.prototype.getActionUrl = function(act) {
-            //判断路径   这里是config.json 中设置执行上传的action名称
-            if (act == 'uploadimage' || act == 'uploadvideo' || act == 'uploadscrawl' || act == 'uploadfile' || act == 'listimage' || act == 'listfile'|| act == 'catchimage') {
-               
-              return ``;
-            } else {
-              return this._bkGetActionUrl.call(this, act);
-            }
-          }
-        }
+      
         this.editor = UE.getEditor(this.id, this.config);
         this.editor.addListener("ready", ()=>{
           this.editor.setContent(this.config.initialContent); // 确保UE加载完成后，放入内容。
