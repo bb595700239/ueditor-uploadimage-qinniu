@@ -38,6 +38,13 @@ module.exports = {
           '^/list': '/list'
         }
       },
+      '/back': {
+        target: 'http://test-user-center.test176.cn',//http://www.hpaxcf.com/
+        changeOrigin: true,
+        pathRewrite: {
+          '^/back': '/back'
+        }
+      },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

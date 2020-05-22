@@ -6181,53 +6181,65 @@
                     blob = owner._blob,
                     server = obj[0],
                     formData, binary, fr;
+                
+                UE.Editor.prototype.ossUpload(blob.source, UE.Editor.prototype.ossConfig, 1).then((resolve) => {
+                    const data = resolve.data
+                    let link = UE.Editor.prototype.getExtranetUrl(data.name, 2);//获取图片外网访问地址
+                    console.log(link)
+                    var me = this;
+                    me._response = JSON.stringify({ "state": "SUCCESS", "original": data.name, "size": blob.size, "title": data.name, "type": ".png", "url": link })
+                    return me.trigger('load');
+                }).catch(_ => {
+                    console.log(_)
+                })
 
-                if ( opts.sendAsBinary ) {
-                    server += (/\?/.test( server ) ? '&' : '?') +
-                            $.param( owner._formData );
 
-                    binary = blob.getSource();
-                } else {
-                    formData = new FormData();
-                    $.each( owner._formData, function( k, v ) {
-                        formData.append( k, v );
-                    });
-                    formData.append('token', obj[1])
-                    formData.append( opts.fileVal, blob.getSource(),
-                            opts.filename || owner._formData.name || '' );
-                }
+                // if ( opts.sendAsBinary ) {
+                //     server += (/\?/.test( server ) ? '&' : '?') +
+                //             $.param( owner._formData );
 
-                if ( opts.withCredentials && 'withCredentials' in xhr ) {
-                    xhr.open( opts.method, server, true );
-                    xhr.withCredentials = true;
-                } else {
-                    xhr.open( opts.method, server );
-                }
+                //     binary = blob.getSource();
+                // } else {
+                //     formData = new FormData();
+                //     $.each( owner._formData, function( k, v ) {
+                //         formData.append( k, v );
+                //     });
+                //     formData.append('token', obj[1])
+                //     formData.append( opts.fileVal, blob.getSource(),
+                //             opts.filename || owner._formData.name || '' );
+                // }
 
-                this._setRequestHeader( xhr, opts.headers );
+                // if ( opts.withCredentials && 'withCredentials' in xhr ) {
+                //     xhr.open( opts.method, server, true );
+                //     xhr.withCredentials = true;
+                // } else {
+                //     xhr.open( opts.method, server );
+                // }
 
-                if ( binary ) {
-                    xhr.overrideMimeType('application/octet-stream');
+                // this._setRequestHeader( xhr, opts.headers );
 
-                    // android直接发送blob会导致服务端接收到的是空文件。
-                    // bug详情。
-                    // https://code.google.com/p/android/issues/detail?id=39882
-                    // 所以先用fileReader读取出来再通过arraybuffer的方式发送。
-                    if ( Base.os.android ) {
-                        fr = new FileReader();
+                // if ( binary ) {
+                //     xhr.overrideMimeType('application/octet-stream');
 
-                        fr.onload = function() {
-                            xhr.send( this.result );
-                            fr = fr.onload = null;
-                        };
+                //     // android直接发送blob会导致服务端接收到的是空文件。
+                //     // bug详情。
+                //     // https://code.google.com/p/android/issues/detail?id=39882
+                //     // 所以先用fileReader读取出来再通过arraybuffer的方式发送。
+                //     if ( Base.os.android ) {
+                //         fr = new FileReader();
 
-                        fr.readAsArrayBuffer( binary );
-                    } else {
-                        xhr.send( binary );
-                    }
-                } else {
-                    xhr.send( formData );
-                }
+                //         fr.onload = function() {
+                //             xhr.send( this.result );
+                //             fr = fr.onload = null;
+                //         };
+
+                //         fr.readAsArrayBuffer( binary );
+                //     } else {
+                //         xhr.send( binary );
+                //     }
+                // } else {
+                //     xhr.send( formData );
+                // }
             },
 
             getResponse: function() {

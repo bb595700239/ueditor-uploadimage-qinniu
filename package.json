@@ -9,6 +9,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "ali-oss": "^6.8.0",
+    "axios": "^0.19.2",
+    "blueimp-canvas-to-blob": "^3.27.0",
     "crypto-js": "^3.1.9-1",
     "element-ui": "^2.0.3",
     "vue": "^2.5.2",

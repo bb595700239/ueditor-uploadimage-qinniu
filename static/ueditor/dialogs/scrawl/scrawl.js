@@ -630,41 +630,22 @@ function exec(scrawlObj) {
     if (scrawlObj.isScrawl) {
         addMaskLayer(lang.scrawlUpLoading);
         var base64 = scrawlObj.getCanvasData();
+        
         if (!!base64) {
-            var options = {
-                timeout:100000,
-                onsuccess:function (xhr) {
-                  console.log(xhr)
+            UE.Editor.prototype.uploadBase64(new Date().getTime()+'name','data:image/png;base64,'+base64, UE.Editor.prototype.ossConfig).then((resolve) => {
+                const data = resolve.data
+                let link = UE.Editor.prototype.getExtranetUrl(data.name, 2);//获取图片外网访问地址
+                var imgObj = {};
+                imgObj.src = link;
+                imgObj._src = link;
+                imgObj.alt = '';
+                imgObj.title = '';
+                editor.execCommand("insertImage", imgObj);
+                dialog.close();
+            }).catch(_ => {
+                console.log(_)
+            })
 
-                        var responseObj;
-                        responseObj = eval("(" + xhr.responseText + ")");
-                        if (responseObj.hash) {
-                            var imgObj = {},
-                                url = actionUrlArr[2]+responseObj.hash
-                            imgObj.src = url;
-                            imgObj._src = url;
-                            imgObj.alt = responseObj.original || '';
-                            imgObj.title = responseObj.title || '';
-                            editor.execCommand("insertImage", imgObj);
-                            dialog.close();
-                        } else {
-                            alert(responseObj.state);
-                        }
-
-                },
-                onerror:function () {
-                    alert(lang.imageError);
-                    dialog.close();
-                }
-            };
-
-            var actionUrl = editor.getActionUrl(editor.getOpt('scrawlActionName')),
-                params = utils.serializeParam(editor.queryCommandValue('serverparam')) || '',
-                actionUrlArr = actionUrl.split(',')
-                url = utils.formatUrl(actionUrl + (actionUrl.indexOf('?') == -1 ? '?':'&') + params);
-            options['data'] = base64
-            options.headers = {'Authorization': 'UpToken '+actionUrlArr[1]}
-            ajax.request(actionUrlArr[0]+'/putb64/-1', options);
         }
     } else {
         addMaskLayer(lang.noScarwl + "&nbsp;&nbsp;&nbsp;<input type='button' value='" + lang.continueBtn + "'  onclick='removeMaskLayer()'/>");
