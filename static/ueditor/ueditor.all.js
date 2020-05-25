@@ -8083,7 +8083,15 @@
 
                     /* 发出ajax请求 */
                     me._serverConfigLoaded = false;
-                    configUrl && UE.ajax.request(configUrl, {
+                    try {
+                        var config = isJsonp;
+                        utils.extend(me.options, config);
+                        me.fireEvent('serverConfigLoaded');
+                        me._serverConfigLoaded = true;
+                    } catch (e) {
+                        showErrorMsg(me.getLang('loadconfigFormatError'));
+                    }
+                    /* configUrl && UE.ajax.request(configUrl, {
                         'method': 'GET',
                         'dataType': isJsonp ? 'jsonp' : '',
                         'onsuccess': function (r) {
@@ -8099,7 +8107,7 @@
                         'onerror': function () {
                             showErrorMsg(me.getLang('loadconfigHttpError'));
                         }
-                    });
+                    }); */
                 } catch (e) {
                     showErrorMsg(me.getLang('loadconfigError'));
                 }
@@ -23805,10 +23813,10 @@
             /* 插入loading的占位符 */
             me.execCommand('inserthtml', loadingHtml);
             /* 判断后端配置是否没有加载成功 */
-            if (!me.getOpt(filetype + 'ActionName')) {
+            /* if (!me.getOpt(filetype + 'ActionName')) {
                 errorHandler(me.getLang('autoupload.errorLoadConfig'));
                 return;
-            }
+            } */
             /* 判断文件大小是否超出限制 */
             if (file.size > maxSize) {
                 errorHandler(me.getLang('autoupload.exceedSizeError'));
@@ -24523,10 +24531,10 @@
                     me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme + '/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
 
                     /* 判断后端配置是否没有加载成功 */
-                    if (!me.getOpt('imageActionName')) {
+                    /* if (!me.getOpt('imageActionName')) {
                         errorHandler(me.getLang('autoupload.errorLoadConfig'));
                         return;
-                    }
+                    } */
                     // 判断文件格式是否错误
                     var filename = input.value,
                         fileext = filename ? filename.substr(filename.lastIndexOf('.')) : '';

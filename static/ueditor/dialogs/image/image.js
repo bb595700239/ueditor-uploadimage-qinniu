@@ -356,10 +356,10 @@
             if (!WebUploader.Uploader.support()) {
                 $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
                 return;
-            } else if (!editor.getOpt('imageActionName')) {
+            }/*  else if (!editor.getOpt('imageActionName')) {
                 $('#filePickerReady').after($('<div>').html(lang.errorLoadConfig)).hide();
                 return;
-            }
+            } */
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {

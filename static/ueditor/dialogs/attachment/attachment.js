@@ -150,10 +150,10 @@
             if (!WebUploader.Uploader.support()) {
                 $('#filePickerReady').after($('<div>').html(lang.errorNotSupport)).hide();
                 return;
-            } else if (!editor.getOpt('fileActionName')) {
+            }/*  else if (!editor.getOpt('fileActionName')) {
                 $('#filePickerReady').after($('<div>').html(lang.errorLoadConfig)).hide();
                 return;
-            }
+            } */
 
             uploader = _this.uploader = WebUploader.create({
                 pick: {

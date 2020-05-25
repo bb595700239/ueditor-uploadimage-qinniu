@@ -172,7 +172,7 @@ function upload(e, config, type) {
     }
 
 
-    let storeAs = file.name;//文件名 new Date().getTime() +
+    let storeAs = new Date().getTime() + '=-=' + file.name;//文件名
     fileName = storeAs;//文件名
     let fileType = ['image/png', 'image/jpeg ', 'image/jpg', 'image/gif'].indexOf(file.type) > -1;//获取文件类型
     let hasFile = files.filter((item) => {
