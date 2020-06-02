@@ -6187,7 +6187,8 @@
                     let link = UE.Editor.prototype.getExtranetUrl(data.name, 2);//获取图片外网访问地址
                     console.log(link)
                     var me = this;
-                    me._response = JSON.stringify({ "state": "SUCCESS", "original": data.name, "size": blob.size, "title": data.name, "type": ".png", "url": link })
+                    var name = data.name.split('=-=')[1]
+                    me._response = JSON.stringify({ "state": "SUCCESS", "original": name, "size": blob.size, "title": name, "type": ".png", "url": link })
                     return me.trigger('load');
                 }).catch(_ => {
                     console.log(_)
